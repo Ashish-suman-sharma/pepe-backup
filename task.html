@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ScopCoin - Boosters</title>
+    <link rel="stylesheet" href="./assets/css/style.css" />
+    <link rel="stylesheet" href="./assets/css/responsive.css" />
+    <link rel="icon" type="image/x-icon" href="./assets/favicon/favicon.ico" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="./assets/favicon/favicon-16x16.png"
+      sizes="16x16"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="./assets/favicon/favicon-32x32.png"
+      sizes="32x32"
+    />
+    <link rel="apple-touch-icon" href="./assets/favicon/apple-touch-icon.png" />
+    <link
+      rel="android-chrome-192x192"
+      href="./assets/favicon/android-chrome-192x192.png"
+      sizes="192x192"
+    />
+    <link
+      rel="android-chrome-512x512"
+      href="./assets/favicon/android-chrome-512x512.png"
+      sizes="512x512"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      * {
+        user-select: none;
+      }
+      .task-card {
+        background-color: #1f2937;
+        border-radius: 15px;
+        margin: 10px auto;
+        padding: 15px;
+        width: 95%;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .task-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: white;
+        width: 100%;
+      }
+      .task-link img {
+        margin-right: 15px;
+      }
+      .task-info {
+        flex-grow: 1;
+      }
+      .task-info h4 {
+        margin: 0;
+        font-size: 18px;
+      }
+      .task-info h5 {
+        margin: 5px 0 0 0;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+      }
+      .task-info h5 img {
+        margin-right: 10px;
+      }
+      .disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+      .claim-button {
+        background-color: #4caf50; /* Green */
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 10px 0;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      .claim-button:hover {
+        background-color: #45a049;
+      }
+      .back-arrow {
+        display: inline-block;
+        text-decoration: none;
+        color: black;
+        font-size: 40px;
+        font-weight: 900;
+        padding: 10px;
+        border-radius: 5px;
+        transition: color 0.3s;
+      }
+      .back-arrow:hover {
+        color: white;
+      }
+    </style>
+  </head>
+
+  <body class="boost">
+    <a href="index.html" class="back-arrow">&#8592;</a>
+
+    <div
+      class="user-balance ml-4 mr-4 bg-slate-900 rounded-3xl shadow-lg p-4 mt-2"
+    >
+      <div class="balance-coins">
+        <img src="./photos/anzabcoin.png" width="50px" alt="" />
+        <span id="score">0</span>
+      </div>
+      <div class="balance-title">
+        <span class="select-none text-center"
+          >Do the tasks to mine more coins</span
+        >
+        <hr class="mt-2" />
+      </div>
+      <button id="claimButton" class="claim-button">Claim</button>
+    </div>
+
+    <div class="buy-skins">
+      <div class="boosters-title" style="padding: 0 1.25rem">
+        <h2 class="select-none text-2xl">Tasks</h2>
+      </div>
+      <div class="task-list">
+        <div class="task-card" id="task1">
+          <a
+            href="https://www.youtube.com"
+            class="task-link"
+            data-task-id="task1"
+          >
+            <img src="./photos/youtube.png" width="50px" alt="YouTube" />
+            <div class="task-info">
+              <h4>Subscribe Youtube Channel</h4>
+              <h5>
+                <img src="./photos/anzabcoin.png" width="20px" alt="coins" />
+                50,000
+              </h5>
+            </div>
+          </a>
+        </div>
+        <div class="task-card" id="task2">
+          <a href="https://t.me/" class="task-link" data-task-id="task2">
+            <img src="./photos/telegram.png" width="50px" alt="Telegram" />
+            <div class="task-info">
+              <h4>Join Community</h4>
+              <h5>
+                <img src="./photos/anzabcoin.png" width="20px" alt="coins" />
+                50,000
+              </h5>
+            </div>
+          </a>
+        </div>
+        <!-- Add more task cards as needed -->
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const scoreElement = document.getElementById("score");
+        const claimButton = document.getElementById("claimButton");
+
+        function loadScore() {
+          let score = localStorage.getItem("score") || 0;
+          scoreElement.textContent = score;
+        }
+        loadScore();
+
+        function updateScore(amount) {
+          let score = parseInt(localStorage.getItem("score")) || 0;
+          score += amount;
+          localStorage.setItem("score", score);
+          scoreElement.textContent = score;
+        }
+
+        function markTaskAsCompleted(taskId) {
+          localStorage.setItem(`task-${taskId}-completed`, "true");
+          document.querySelector(`#${taskId}`).classList.add("disabled");
+        }
+
+        function checkTaskCompletion() {
+          document.querySelectorAll(".task-card").forEach((card) => {
+            const taskId = card.id;
+            if (localStorage.getItem(`task-${taskId}-completed`) === "true") {
+              card.classList.add("disabled");
+            }
+          });
+        }
+
+        function claimCoins() {
+          const coinsToDeduct = 50000;
+          let currentCoins = parseInt(scoreElement.textContent) || 0;
+
+          if (currentCoins >= coinsToDeduct) {
+            currentCoins -= coinsToDeduct;
+            scoreElement.textContent = currentCoins;
+            localStorage.setItem("score", currentCoins);
+
+            let indexPageCoins = localStorage.getItem("coinCount") || 0;
+            indexPageCoins = parseInt(indexPageCoins) + coinsToDeduct;
+            localStorage.setItem("coinCount", indexPageCoins);
+          } else {
+            alert("Not enough coins to claim.");
+          }
+        }
+
+        claimButton.addEventListener("click", () => {
+          claimCoins();
+        });
+
+        document.querySelectorAll(".task-link").forEach((button) => {
+          const taskId = button.getAttribute("data-task-id");
+
+          button.addEventListener("click", (event) => {
+            event.preventDefault();
+            updateScore(50000);
+            window.open(button.href, "_blank");
+            markTaskAsCompleted(taskId);
+            setTimeout(() => {
+              location.reload();
+            }, 2000);
+          });
+        });
+
+        checkTaskCompletion();
+      });
+    </script>
+  </body>
+</html>
